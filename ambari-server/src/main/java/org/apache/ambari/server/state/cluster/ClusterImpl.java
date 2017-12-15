@@ -1336,6 +1336,7 @@ public class ClusterImpl implements Cluster {
     try {
       refresh();
       deleteAllServices();
+      resetHostVersions();
 
       refresh(); // update one-to-many clusterServiceEntities
       removeEntities();
@@ -1353,6 +1354,15 @@ public class ClusterImpl implements Cluster {
     upgradeDAO.removeAll(clusterId);
     topologyRequestDAO.removeAll(clusterId);
     clusterDAO.removeByPK(clusterId);
+  }
+
+  private void resetHostVersions() {
+    for (HostVersionEntity hostVersionEntity : hostVersionDAO.findByCluster(getClusterName())) {
+      if (!hostVersionEntity.getState().equals(RepositoryVersionState.NOT_REQUIRED)) {
+        hostVersionEntity.setState(RepositoryVersionState.NOT_REQUIRED);
+        hostVersionDAO.merge(hostVersionEntity);
+      }
+    }
   }
 
   @Override
