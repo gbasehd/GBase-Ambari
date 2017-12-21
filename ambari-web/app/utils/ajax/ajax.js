@@ -2483,6 +2483,28 @@ var urls = {
     }
   },
 
+
+  'bulk_request.hosts.update_slot_id': {
+    'real': '/clusters/{clusterName}/hosts',
+    'mock': '',
+    'format': function(data) {
+      return {
+        type: 'PUT',
+        data: JSON.stringify({
+          RequestInfo: {
+            context: data.requestInfo,
+            query: 'Hosts/host_name.in(' + data.hostNames + ')'
+          },
+          Body: {
+            Hosts: {
+              slot_info: data.slotId
+            }
+          }
+        })
+      }
+    }
+  },
+
   'bulk_request.hosts.all_components.passive_state': {
     'real': '/clusters/{clusterName}/host_components',
     'mock': '',
@@ -2650,7 +2672,7 @@ var urls = {
     'mock': ''
   },
   'hosts.heatmaps': {
-    'real': '/clusters/{clusterName}/hosts?fields=Hosts/rack_info,Hosts/host_name,Hosts/public_host_name,Hosts/os_type,Hosts/ip,host_components,metrics/disk,metrics/cpu/cpu_system,metrics/cpu/cpu_user,metrics/memory/mem_total,metrics/memory/mem_free&minimal_response=true',
+    'real': '/clusters/{clusterName}/hosts?fields=Hosts/rack_info,Hosts/slot_info,Hosts/host_name,Hosts/public_host_name,Hosts/os_type,Hosts/ip,host_components,metrics/disk,metrics/cpu/cpu_system,metrics/cpu/cpu_user,metrics/memory/mem_total,metrics/memory/mem_free&minimal_response=true',
     'mock': '/data/hosts/HDP2/hosts.json'
   },
   'namenode.cpu_wio': {

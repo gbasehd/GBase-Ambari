@@ -29,6 +29,7 @@ public class HostRequest {
   private String clusterName; // CREATE/UPDATE
   private Map<String, String> hostAttributes; // CREATE/UPDATE
   private String rackInfo;
+  private String slotInfo;
   private List<ConfigurationRequest> desiredConfigs; // UPDATE
   private String maintenanceState; // UPDATE
   private String blueprint;
@@ -71,6 +72,14 @@ public class HostRequest {
   
   public void setRackInfo(String info) {
     rackInfo = info;
+  }
+
+  public String getSlotInfo() {
+    return slotInfo;
+  }
+
+  public void setSlotInfo(String slotInfo) {
+    this.slotInfo = slotInfo;
   }
   
   public String getPublicHostName() {

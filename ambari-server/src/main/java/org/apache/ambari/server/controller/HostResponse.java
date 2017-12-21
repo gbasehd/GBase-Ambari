@@ -110,6 +110,11 @@ public class HostResponse {
   private String rackInfo;
 
   /**
+   * Slot to which the Host belongs to
+   */
+  private String slotInfo;
+
+  /**
    * Additional Host attributes
    */
   private Map<String, String> hostAttributes;
@@ -162,7 +167,7 @@ public class HostResponse {
                       String ipv4, String ipv6, int cpuCount, int phCpuCount, String osArch, String osType,
                       String osInfo, long availableMemBytes, long totalMemBytes,
                       List<DiskInfo> disksInfo, long lastHeartbeatTime,
-                      long lastRegistrationTime, String rackInfo,
+                      long lastRegistrationTime, String rackInfo, String slotInfo,
                       Map<String, String> hostAttributes, AgentVersion agentVersion,
                       HostHealthStatus healthStatus, String hostState, String status) {
     this.hostname = hostname;
@@ -180,6 +185,7 @@ public class HostResponse {
     this.lastHeartbeatTime = lastHeartbeatTime;
     this.lastRegistrationTime = lastRegistrationTime;
     this.rackInfo = rackInfo;
+    this.slotInfo = slotInfo;
     this.hostAttributes = hostAttributes;
     this.agentVersion = agentVersion;
     this.healthStatus = healthStatus;
@@ -192,7 +198,7 @@ public class HostResponse {
     this(hostname, "", "", "",
         0, 0, "", "",
         "", 0, 0, new ArrayList<DiskInfo>(),
-        0, 0, "",
+        0, 0, "", "",
         new HashMap<String, String>(),
         null, null, null, null);
   }
@@ -407,6 +413,19 @@ public class HostResponse {
    */
   public void setRackInfo(String rackInfo) {
     this.rackInfo = rackInfo;
+  }
+
+  /**
+   * @return the slotInfo
+   */
+  public String getSlotInfo() {
+    return slotInfo;
+  }
+  /**
+   * @param slotInfo the slotInfo to set
+   */
+  public void setSlotInfo(String slotInfo) {
+    this.slotInfo = slotInfo;
   }
 
   /**

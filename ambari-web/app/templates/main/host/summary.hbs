@@ -148,6 +148,13 @@
                           {{/isAuthorized}}
                         </dd>
 
+                        <dt class="summary-rack-label">{{t common.slot}}:</dt>
+                        <dd class="summary-rack-value">&nbsp;{{view.content.slot}}
+                          {{#isAuthorized "HOST.TOGGLE_MAINTENANCE"}}
+                            <a class="set-rack-id" {{action setSlotId view.content target="controller"}}><i class="icon-pencil"></i></a>
+                          {{/isAuthorized}}
+                        </dd>
+
                         <dt class="summary-os-label">{{t common.os}}:</dt>
                           <dd class="summary-os-value">&nbsp;{{view.content.osType}}&nbsp;({{view.content.osArch}})</dd>
 

@@ -39,6 +39,7 @@
         "Hosts/os_type",
         "Hosts/os_family",
         "Hosts/rack_info",
+        "Hosts/slot_info",
         "Hosts/last_heartbeat_time",
         "Hosts/last_agent_env",
         "Hosts/last_registration_time",

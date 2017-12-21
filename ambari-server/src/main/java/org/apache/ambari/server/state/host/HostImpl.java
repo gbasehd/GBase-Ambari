@@ -850,6 +850,18 @@ public class HostImpl implements Host {
   }
 
   @Override
+  public String getSlotInfo() {
+    return getHostEntity().getSlotInfo();
+  }
+
+  @Override
+  public void setSlotInfo(String slotInfo) {
+    HostEntity hostEntity = getHostEntity();
+    hostEntity.setSlotInfo(slotInfo);
+    hostDAO.merge(hostEntity);
+  }
+
+  @Override
   public long getLastRegistrationTime() {
     return getHostEntity().getLastRegistrationTime();
   }
@@ -955,6 +967,7 @@ public class HostImpl implements Host {
     r.setOsInfo(getOsInfo());
     r.setOsType(getOsType());
     r.setRackInfo(getRackInfo());
+    r.setSlotInfo(getSlotInfo());
     r.setTotalMemBytes(getTotalMemBytes());
     r.setPublicHostName(getPublicHostName());
     r.setHostState(getState().toString());

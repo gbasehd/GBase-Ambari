@@ -110,6 +110,8 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
       PropertyHelper.getPropertyId("Hosts", "os_family");
   public static final String HOST_RACK_INFO_PROPERTY_ID =
       PropertyHelper.getPropertyId("Hosts", "rack_info");
+  public static final String HOST_SLOT_INFO_PROPERTY_ID =
+          PropertyHelper.getPropertyId("Hosts", "slot_info");
   public static final String HOST_LAST_HEARTBEAT_TIME_PROPERTY_ID =
       PropertyHelper.getPropertyId("Hosts", "last_heartbeat_time");
   public static final String HOST_LAST_REGISTRATION_TIME_PROPERTY_ID =
@@ -150,6 +152,8 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
   //todo use the same json structure for cluster host addition (cluster template and upscale)
   public static final String HOST_RACK_INFO_NO_CATEGORY_PROPERTY_ID =
       PropertyHelper.getPropertyId(null, "rack_info");
+  public static final String HOST_SLOT_INFO_NO_CATEGORY_PROPERTY_ID =
+          PropertyHelper.getPropertyId(null, "slot_info");
 
   protected static final String FORCE_DELETE_COMPONENTS = "force_delete_components";
 
@@ -277,6 +281,8 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
 
       setResourceProperty(resource, HOST_RACK_INFO_PROPERTY_ID,
           response.getRackInfo(), requestedIds);
+      setResourceProperty(resource, HOST_SLOT_INFO_PROPERTY_ID,
+          response.getSlotInfo(), requestedIds);
       setResourceProperty(resource, HOST_LAST_HEARTBEAT_TIME_PROPERTY_ID,
           response.getLastHeartbeatTime(), requestedIds);
       setResourceProperty(resource, HOST_LAST_AGENT_ENV_PROPERTY_ID,
@@ -369,6 +375,7 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
     baseUnsupported.remove(HOST_COUNT_PROPERTY_ID);
     baseUnsupported.remove(HOST_PREDICATE_PROPERTY_ID);
     baseUnsupported.remove(HOST_RACK_INFO_NO_CATEGORY_PROPERTY_ID);
+    baseUnsupported.remove(HOST_SLOT_INFO_NO_CATEGORY_PROPERTY_ID);
 
     return checkConfigPropertyIds(baseUnsupported, "Hosts");
   }
@@ -424,8 +431,11 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
 
     String rackInfo = (String) ((null != properties.get(HOST_RACK_INFO_PROPERTY_ID))? properties.get(HOST_RACK_INFO_PROPERTY_ID):
             properties.get(HOST_RACK_INFO_NO_CATEGORY_PROPERTY_ID));
+    String slotInfo = (String) ((null != properties.get(HOST_SLOT_INFO_PROPERTY_ID))? properties.get(HOST_SLOT_INFO_PROPERTY_ID):
+            properties.get(HOST_SLOT_INFO_NO_CATEGORY_PROPERTY_ID));
 
     hostRequest.setRackInfo(rackInfo);
+    hostRequest.setSlotInfo(slotInfo);
     hostRequest.setBlueprintName((String) properties.get(BLUEPRINT_PROPERTY_ID));
     hostRequest.setHostGroupName((String) properties.get(HOSTGROUP_PROPERTY_ID));
 
@@ -742,6 +752,17 @@ public class HostResourceProvider extends AbstractControllerResourceProvider {
           throw new AuthorizationException("The authenticated user is not authorized to update host rack information");
         }
         host.setRackInfo(requestRackInfo);
+      }
+
+      String  slotInfo        = host.getSlotInfo();
+      String  requestSlotInfo = request.getSlotInfo();
+      boolean slotChange      = requestSlotInfo != null && !requestSlotInfo.equals(slotInfo);
+
+      if(slotChange) {
+        if(!AuthorizationHelper.isAuthorized(ResourceType.CLUSTER, resourceId, RoleAuthorization.HOST_ADD_DELETE_HOSTS)) {
+          throw new AuthorizationException("The authenticated user is not authorized to update host slot information");
+        }
+        host.setSlotInfo(requestSlotInfo);
       }
 
       if (null != request.getPublicHostName()) {
